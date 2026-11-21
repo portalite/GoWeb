@@ -11,5 +11,5 @@ author_email = "goweb@example.com"
 [tool.briefcase.app.goweb]
 formal_name = "GoWeb"
 description = "Mobile Web Browser"
-sources = ["SRC/goweb"]
+sources = ["src/goweb"]
 requires = ["toga"]

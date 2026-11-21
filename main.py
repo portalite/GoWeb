@@ -1,62 +1,51 @@
 
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.utils import platform
-import webbrowser
+import toga
+from toga.style import Pack
+from toga.style.pack import COLUMN, ROW
 
 
-class GoWeb(App):
-    def build(self):
-        self.layout = BoxLayout(
-            orientation="vertical",
-            padding=8,
-            spacing=8
+class GoWeb(toga.App):
+
+    def startup(self):
+        self.web = toga.WebView(
+            url="https://www.google.com",
+            style=Pack(flex=1)
         )
 
-        self.layout.add_widget(Label(
-            text="GoWeb",
-            font_size=28,
-            size_hint_y=None,
-            height=55
-        ))
-
-        bar = BoxLayout(
-            size_hint_y=None,
-            height=50,
-            spacing=5
+        self.address = toga.TextInput(
+            value="https://www.google.com",
+            style=Pack(flex=1)
         )
 
-        self.address = TextInput(
-            hint_text="Adres veya site yaz...",
-            multiline=False
+        go = toga.Button(
+            "Git",
+            on_press=self.open_site,
+            style=Pack(padding=5)
         )
 
-        button = Button(text="Git")
-        button.bind(on_press=self.open_site)
+        bar = toga.Box(
+            children=[self.address, go],
+            style=Pack(direction=ROW, padding=5)
+        )
 
-        bar.add_widget(self.address)
-        bar.add_widget(button)
-        self.layout.add_widget(bar)
+        layout = toga.Box(
+            children=[bar, self.web],
+            style=Pack(direction=COLUMN, flex=1)
+        )
 
-        self.status = Label(text="GoWeb hazır")
-        self.layout.add_widget(self.status)
+        self.main_window = toga.MainWindow(title="GoWeb")
+        self.main_window.content = layout
+        self.main_window.show()
 
-        return self.layout
+    def open_site(self, widget):
+        url = self.address.value.strip()
 
-    def open_site(self, instance):
-        url = self.address.text.strip()
-
-        if not url:
-            return
-
-        if not url.startswith(("http://", "https://")):
+        if url and not url.startswith(("http://", "https://")):
             url = "https://" + url
 
-        webbrowser.open(url)
-        self.status.text = "Açılıyor: " + url
+        if url:
+            self.web.url = url
 
 
-GoWeb().run()
+def main():
+    return GoWeb()

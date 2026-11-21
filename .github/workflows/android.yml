@@ -30,7 +30,7 @@ jobs:
       - name: Android projesini oluştur
         run: briefcase create android --no-input
 
-            - name: APK oluştur
+      - name: Android uygulamasını derle
         run: briefcase build android --no-input
 
       - name: APK dosyasını kaydet
@@ -38,9 +38,3 @@ jobs:
         with:
           name: GoWeb-Android-APK
           path: build/goweb/android/gradle/app/build/outputs/apk/debug/*.apk
-
-      - name: APK dosyasını kaydet
-        uses: actions/upload-artifact@v4
-        with:
-          name: GoWeb-Android-APK
-          path: dist/*.apk

@@ -3,10 +3,13 @@
 project_name = "GoWeb"
 bundle = "com.kaan"
 version = "0.1.0"
+url = "https://github.com"
 license = "BSD-3-Clause"
+author = "GoWeb"
+author_email = "goweb@example.com"
 
-[tool.briefcase.app.main]
+[tool.briefcase.app.goweb]
 formal_name = "GoWeb"
-description = "GoWeb Android Web Browser"
-sources = ["main.py"]
+description = "Mobile Web Browser"
+sources = ["src/goweb"]
 requires = ["toga"]

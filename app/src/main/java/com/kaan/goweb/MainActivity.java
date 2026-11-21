@@ -62,14 +62,33 @@ public class MainActivity extends Activity {
     }
 
     void openSite() {
-        String url = address.getText().toString().trim();
+    String text = address.getText().toString().trim();
 
-        if (!url.startsWith("http://") &&
-            !url.startsWith("https://")) {
-            url = "https://" + url;
+    if (text.isEmpty()) {
+        return;
+    }
+
+    if (text.contains(" ") ||
+        (!text.contains(".") &&
+         !text.startsWith("http://") &&
+         !text.startsWith("https://"))) {
+
+        try {
+            String query = java.net.URLEncoder.encode(text, "UTF-8");
+            web.loadUrl("https://www.google.com/search?q=" + query);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        web.loadUrl(url);
+    } else {
+        if (!text.startsWith("http://") &&
+            !text.startsWith("https://")) {
+            text = "https://" + text;
+        }
+
+        web.loadUrl(text);
+    }
+}
     }
 
     @Override

@@ -3,14 +3,13 @@ package com.kaan.goweb;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import java.net.URLEncoder;
 
 public class MainActivity extends Activity {
 
@@ -44,11 +43,13 @@ public class MainActivity extends Activity {
         web.getSettings().setJavaScriptEnabled(true);
 
         layout.addView(bar);
-        layout.addView(web, new LinearLayout.LayoutParams(-1, 0, 1));
+        layout.addView(web,
+            new LinearLayout.LayoutParams(-1, 0, 1));
 
         setContentView(layout);
 
         go.setOnClickListener(v -> openSite());
+
         address.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_GO ||
                 actionId == EditorInfo.IME_ACTION_DONE) {
@@ -62,33 +63,26 @@ public class MainActivity extends Activity {
     }
 
     void openSite() {
-    String text = address.getText().toString().trim();
+        String text = address.getText().toString().trim();
 
-    if (text.isEmpty()) {
-        return;
-    }
+        if (text.isEmpty()) return;
 
-    if (text.contains(" ") ||
-        (!text.contains(".") &&
-         !text.startsWith("http://") &&
-         !text.startsWith("https://"))) {
-
-        try {
-            String query = java.net.URLEncoder.encode(text, "UTF-8");
-            web.loadUrl("https://www.google.com/search?q=" + query);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (text.startsWith("http://") ||
+            text.startsWith("https://")) {
+            web.loadUrl(text);
+        } else if (text.matches(
+            "(?i)^[a-z0-9.-]+\\.[a-z]{2,}(/.*)?$")) {
+            web.loadUrl("https://" + text);
+        } else {
+            try {
+                String query = URLEncoder.encode(text, "UTF-8");
+                web.loadUrl(
+                    "https://www.google.com/search?q=" + query
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-    } else {
-        if (!text.startsWith("http://") &&
-            !text.startsWith("https://")) {
-            text = "https://" + text;
-        }
-
-        web.loadUrl(text);
-    }
-}
     }
 
     @Override

@@ -1,0 +1,17 @@
+
+plugins {
+    id 'com.android.application' version '8.6.1'
+}
+
+android {
+    namespace 'com.kaan.goweb'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.kaan.goweb'
+        minSdk 23
+        targetSdk 28
+        versionCode 1
+        versionName '1.0'
+    }
+}
